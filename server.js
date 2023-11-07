@@ -1,6 +1,6 @@
-const express = requrie('express');
+const express = require('express');
 const fs = require('fs');
-const notes = require('./db/db.json');
+const parsedNotes = require('./db/db.json');
 const path = require('path');
 const uuid = require('uuid');
 const { DH_CHECK_P_NOT_SAFE_PRIME } = require("constants");
@@ -22,18 +22,18 @@ app.get('/api/notes', (req, res) => {
 
 // Post function to add new notes to db.json
 app.post("/api/notes", (req, res) => {
-    const notes = JSON.parse(fs.readFileSync("./db/db.json"));
+    const parsedNotes = JSON.parse(fs.readFileSync("./db/db.json"));
     const newNotes = req.body;
     newNotes.id = uuid.v4();
-    notes.push(newNotes);
-    fs.writeFileSync("./db/db.json", JSON.stringify(notes))
-    res.json(notes);
+    parsedNotes.push(newNotes);
+    fs.writeFileSync("./db/db.json", JSON.stringify(parsedNotes));
+    res.json(parsedNotes);
 });
 
 //used for deleting notes
 app.delete("/api/notes/:id", (req, res) => {
-    const notes = JSON.parse(fs.readFileSync("./db/db.json"));
-    const delNote = notes.filter((rmvNote) => rmvNote.id !== req.params.id);
+    const parsedNotes = JSON.parse(fs.readFileSync("./db/db.json"));
+    const delNote = parsedNotes.filter((rmvNote) => rmvNote.id !== req.params.id);
     fs.writeFileSync("./db/db.json", JSON.stringify(delNote));
     res.json(delNote);
 });
